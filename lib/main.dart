@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_update/in_app_update.dart';
 // import 'package:translator/translator.dart';
 import 'add_words.dart';
 import 'all_words.dart';
@@ -75,6 +76,44 @@ class _MyHomePageState extends State<MyHomePage> {
     EssetianalPage(),
     AddWordsScreen(),
   ];
+//////////////////////////////
+  int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    checkForUpdate();
+  }
+
+  Future<void> checkForUpdate() async {
+    print('checking for Update');
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+          print('update available');
+          update();
+        }
+      });
+    }).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  void update() async {
+    print('Updating');
+    await InAppUpdate.startFlexibleUpdate();
+    InAppUpdate.completeFlexibleUpdate().then((_) {}).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+  ///////////////////
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

@@ -36,8 +36,6 @@ class _RandomWordsScreenState extends State<RandomWordsScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-  
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocBuilder<GetWordBloc, GetWordState>(
