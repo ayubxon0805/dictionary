@@ -59,7 +59,7 @@ class GetvocabluaryBloc extends Bloc<GetvocabluaryEvent, GetvocabluaryState> {
           end = end + 30;
         }
 
-        if (baseUnits.length - 1 == i && page.length < 30) {
+        if (baseUnits.length - 1 == i) {
           allEssentials.add(page);
           page == [];
         }

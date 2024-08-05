@@ -22,6 +22,10 @@ class _EssetianalPageState extends State<EssetianalPage> {
   List<String> book = [
     "assets/images/1book.jpg",
     "assets/images/2book.jpg",
+    "assets/images/3book.jpg",
+    "assets/images/4book.jpg",
+    "assets/images/5book.jpg",
+    "assets/images/6book.jpg",
   ];
 
   @override

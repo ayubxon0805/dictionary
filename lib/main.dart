@@ -95,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       });
     }).catchError((e) {
+      // ignore: avoid_print
       print(e.toString());
     });
   }
