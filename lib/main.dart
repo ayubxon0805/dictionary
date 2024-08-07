@@ -23,7 +23,6 @@ void main() async {
     storageBucket: '',
   ));
   IsarService().openDB();
-
   // final translator = GoogleTranslator();
   // translator.translate("I love Brazil!", from: 'en', to: 'ru').then((s) {
   //   print('********************************');
