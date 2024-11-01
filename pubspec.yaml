@@ -44,6 +44,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   in_app_update: ^4.2.3
+  collapsible: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

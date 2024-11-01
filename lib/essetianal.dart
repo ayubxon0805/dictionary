@@ -84,6 +84,7 @@ class _EssetianalPageState extends State<EssetianalPage> {
                             ),
                             children: [
                               ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
                                 itemCount: e.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
