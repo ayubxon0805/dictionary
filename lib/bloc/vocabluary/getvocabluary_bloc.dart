@@ -1,8 +1,6 @@
-// ignore_for_file: unused_local_variable, avoid_print, curly_braces_in_flow_control_structures
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-
 import '../../models/words_model/vocabluary_model.dart';
 part 'getvocabluary_event.dart';
 part 'getvocabluary_state.dart';
@@ -43,7 +41,6 @@ class GetvocabluaryBloc extends Bloc<GetvocabluaryEvent, GetvocabluaryState> {
           j.add(vocabluary[i]);
         }
       }
-
       List<List<List<VocabluaryModel>>> allEssentials = [];
       List<List<VocabluaryModel>> page = [];
       int start = 0;
@@ -58,13 +55,11 @@ class GetvocabluaryBloc extends Bloc<GetvocabluaryEvent, GetvocabluaryState> {
           start = start + 30;
           end = end + 30;
         }
-
         if (baseUnits.length - 1 == i) {
           allEssentials.add(page);
           page == [];
         }
       }
-
       if (vocabluary.isNotEmpty) {
         emit(SuccesFirebaseData(data: allEssentials));
       } else {

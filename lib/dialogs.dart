@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dictionary/bloc/get_word/get_word_bloc.dart';
 import 'package:dictionary/services/isar_service.dart';
 import 'package:flutter/material.dart';

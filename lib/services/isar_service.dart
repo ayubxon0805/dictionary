@@ -15,7 +15,7 @@ class IsarService {
 
   Future<List<Words>> getAllSura() async {
     final isar = await db;
-    
+
     return isar.words.where().findAll();
   }
 
@@ -32,6 +32,13 @@ class IsarService {
   Future<void> clear() async {
     final isar = await db;
     return await isar.writeTxn(() async => await isar.words.clear());
+  }
+
+  Future<void> update(Words word) async {
+    final isar = await db;
+    await isar.writeTxn(() async {
+      await isar.words.put(word); // Update existing word
+    });
   }
 
   Future<Isar> openDB() async {

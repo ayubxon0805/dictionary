@@ -4,13 +4,11 @@ import 'package:dictionary/services/isar_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:flutter_tts/flutter_tts.dart';
 
 class EditWordScreen extends StatefulWidget {
   final Words word;
   const EditWordScreen({super.key, required this.word});
-
   @override
   State<EditWordScreen> createState() => _EditWordScreenState();
 }
@@ -27,7 +25,7 @@ class _EditWordScreenState extends State<EditWordScreen> {
     await fTts.speak(text);
   }
 
-  @override 
+  @override
   void initState() {
     super.initState();
     enController.text = widget.word.nameEn ?? "";
@@ -53,7 +51,10 @@ class _EditWordScreenState extends State<EditWordScreen> {
           backgroundColor: const Color.fromARGB(255, 7, 67, 116),
           onPressed: () async {
             await IsarService().remove(widget.word.id).then((value) {
+              // ignore: use_build_context_synchronously
               BlocProvider.of<GetWordBloc>(context).add(GetAllEvent());
+
+              // ignore: use_build_context_synchronously
               Navigator.pop(context);
             });
           },
@@ -143,8 +144,10 @@ class _EditWordScreenState extends State<EditWordScreen> {
                         ..nameUz = uzController.text;
 
                       IsarService().save(newWord).then((value) {
+                        // ignore: use_build_context_synchronously
                         BlocProvider.of<GetWordBloc>(context)
                             .add(GetAllEvent());
+                        // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                       });
                     });

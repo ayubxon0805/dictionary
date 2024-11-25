@@ -1,7 +1,11 @@
 import 'package:dictionary/bloc/vocabluary/getvocabluary_bloc.dart';
+import 'package:dictionary/models/words_model/hiveModel.dart';
+import 'package:dictionary/services/hive_helper/hive_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart'; // DateFormat uchun import
+
 import 'models/words_model/word.dart';
 import 'services/isar_service.dart';
 
@@ -11,11 +15,15 @@ class EssetianalPage extends StatefulWidget {
   State<EssetianalPage> createState() => _EssetianalPageState();
 }
 
+List<HiveVocabluaryModel> unitList = [];
+
 class _EssetianalPageState extends State<EssetianalPage> {
+  late String formattedDate;
+
   @override
   void initState() {
     super.initState();
-
+    formattedDate = DateFormat('HH:mm dd-MM-yyyy').format(DateTime.now());
     BlocProvider.of<GetvocabluaryBloc>(context).add(FirebaseDataEvent());
   }
 
@@ -27,9 +35,13 @@ class _EssetianalPageState extends State<EssetianalPage> {
     "assets/images/5book.jpg",
     "assets/images/6book.jpg",
   ];
+  int unitNumber = 0;
+  int staticnumber = 0;
 
   @override
   Widget build(BuildContext context) {
+    formattedDate = DateFormat('HH:mm dd-MM-yyyy').format(DateTime.now());
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -65,7 +77,7 @@ class _EssetianalPageState extends State<EssetianalPage> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              'Essetianal Book ${state.data.indexOf(x) + 1}',
+                              'Essetianal Book ${unitNumber = state.data.indexOf(x) + 1}',
                               style: GoogleFonts.comfortaa(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
@@ -84,7 +96,7 @@ class _EssetianalPageState extends State<EssetianalPage> {
                             ),
                             children: [
                               ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: e.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
@@ -129,16 +141,83 @@ class _EssetianalPageState extends State<EssetianalPage> {
                                 },
                               ),
                               IconButton(
-                                  onPressed: () async {
-                                    for (var element in e) {
-                                      Words wd = Words(
-                                          nameEn: element.eng,
-                                          nameUz: element.uz);
+                                onPressed: () async {
+                                  List<HiveVocabluaryModel> vocabList = [];
+                                  int count = 0;
 
-                                      IsarService().save(wd);
+                                  // So'zlarni guruhlash (har 20 ta so'zni bitta item sifatida qo'shish)
+                                  for (var word in e) {
+                                    HiveVocabluaryModel vocab =
+                                        HiveVocabluaryModel(
+                                      date: formattedDate,
+                                      eng: word.eng,
+                                      uz: word.uz,
+                                      name: 'Unit ${x.indexOf(e) + 1}',
+                                      unitIndex: x.indexOf(e) + 1,
+                                    );
+                                    vocabList.add(vocab);
+
+                                    count++;
+
+                                    // Agar 20 ta so'z yig'ilsa, ularni bitta item sifatida Hive-ga qo'shish
+                                    if (count == 20) {
+                                      HiveVocabluaryModel vocabBundle =
+                                          HiveVocabluaryModel(
+                                        date: formattedDate,
+                                        eng: vocabList.map((v) => v.eng).join(
+                                            ', '), // So'zlarni bitta satrga birlashtirish
+                                        uz: vocabList.map((v) => v.uz).join(
+                                            ', '), // So'zlarni bitta satrga birlashtirish
+                                        name: 'Unit ${x.indexOf(e) + 1}',
+                                        unitIndex: x.indexOf(e) + 1,
+                                      );
+
+                                      // Hive-ga bitta item sifatida qo'shish
+                                      HiveBoxes.allvocabluary.add(vocabBundle);
+
+                                      // So'zlar ro'yxatini yangilash
+                                      vocabList = [];
+                                      count = 0;
                                     }
-                                  },
-                                  icon: const Icon(Icons.save_alt_outlined))
+                                  }
+
+                                  // Qolgan so'zlarni bitta item sifatida qo'shish
+                                  if (vocabList.isNotEmpty) {
+                                    HiveVocabluaryModel vocabBundle =
+                                        HiveVocabluaryModel(
+                                      date: formattedDate,
+                                      eng: vocabList
+                                          .map((v) => v.eng)
+                                          .join(', '),
+                                      uz: vocabList.map((v) => v.uz).join(', '),
+                                      name: 'Unit ${x.indexOf(e) + 1}',
+                                      unitIndex: x.indexOf(e) + 1,
+                                    );
+                                    HiveBoxes.allvocabluary.add(vocabBundle);
+                                  }
+
+                                  // Isar ma'lumotlar bazasiga saqlash
+                                  for (var word in e) {
+                                    Words wd = Words(
+                                      nameEn: word.eng,
+                                      nameUz: word.uz,
+                                    );
+                                    await IsarService().save(wd);
+                                  }
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Unit ${x.indexOf(e) + 1} ma\'lumotlari saqlandi!',
+                                        style: GoogleFonts.comfortaa(
+                                            color: Colors.white),
+                                      ),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.save_alt_outlined),
+                              )
                             ],
                           );
                         }).toList(),

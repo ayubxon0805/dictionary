@@ -1,14 +1,13 @@
 import 'dart:math';
+import 'package:dictionary/bloc/get_word/get_word_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'bloc/get_word/get_word_bloc.dart';
 import 'models/words_model/word.dart';
 
 class RandomWordsScreen extends StatefulWidget {
   const RandomWordsScreen({super.key});
-
   @override
   State<RandomWordsScreen> createState() => _RandomWordsScreenState();
 }
@@ -213,7 +212,7 @@ class _RandomWordsScreenState extends State<RandomWordsScreen> {
                             )),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     )
                   ],

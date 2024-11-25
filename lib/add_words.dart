@@ -6,7 +6,6 @@ import 'services/isar_service.dart';
 
 class AddWordsScreen extends StatefulWidget {
   const AddWordsScreen({super.key});
-
   @override
   State<AddWordsScreen> createState() => _AddWordsScreenState();
 }
@@ -58,7 +57,6 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
                       ..nameUz = uzController.text
                       ..isSelected = true;
                     await IsarService().save(wd);
-               
 
                     wordsList.add(wd);
                     enController.text = "";
@@ -143,7 +141,6 @@ class _AddWordsScreenState extends State<AddWordsScreen> {
   }
 
   Widget wordsWidget(String en, String uz, bool isBottom) {
-  
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(

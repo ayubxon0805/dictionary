@@ -1,19 +1,25 @@
+// ignore_for_file: avoid_print, unused_field
+
+import 'package:dictionary/bloc/bloc/daily_words_bloc.dart';
+
+import 'package:dictionary/services/hive_helper/hiveclass.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_update/in_app_update.dart';
-// import 'package:translator/translator.dart';
 import 'add_words.dart';
 import 'all_words.dart';
 import 'bloc/get_word/get_word_bloc.dart';
 import 'bloc/vocabluary/getvocabluary_bloc.dart';
 import 'essetianal.dart';
 import 'radn_words.dart';
+import 'package:dictionary/hive_words.dart';
 import 'services/isar_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HiveService.init();
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: 'AIzaSyAmbc_ojG80nfO1AswCVxbZVIU90O_tsi8',
@@ -23,11 +29,7 @@ void main() async {
     storageBucket: '',
   ));
   IsarService().openDB();
-  // final translator = GoogleTranslator();
-  // translator.translate("I love Brazil!", from: 'en', to: 'ru').then((s) {
-  //   print('********************************');
-  //   print(s);
-  // });
+
   runApp(const MyApp());
 }
 
@@ -43,6 +45,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => GetvocabluaryBloc(),
         ),
+        BlocProvider(
+          create: (context) => DailyWordsBloc(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -73,9 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
     AllWordsScreen(),
     RandomWordsScreen(),
     EssetianalPage(),
+    HiveWordsPage(),
     AddWordsScreen(),
   ];
-//////////////////////////////
+
   int _counter = 0;
 
   @override
@@ -94,7 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       });
     }).catchError((e) {
-      // ignore: avoid_print
       print(e.toString());
     });
   }
@@ -107,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // ignore: unused_element
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -153,6 +159,11 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: Color.fromARGB(255, 7, 67, 116),
               icon: Icon(Icons.book),
               label: ("Essetianal"),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Color.fromARGB(255, 7, 67, 116),
+              icon: ImageIcon(AssetImage('assets/images/word.png')),
+              label: ("Daily"),
             ),
             BottomNavigationBarItem(
               backgroundColor: Color.fromARGB(255, 7, 67, 116),
@@ -230,7 +241,11 @@ class _MyHomePageState extends State<MyHomePage> {
 //   @override
 //   Widget build(BuildContext context) {
 //     var localizationDelegate = LocalizedApp.of(context).delegate;
-
+  // final translator = GoogleTranslator();
+  // translator.translate("l!", from: 'en', to: 'ru').then((s) {
+  //   print('********************************');
+  //   print(s);
+  // });
 //     return Scaffold(
 //       appBar: AppBar(
 //         title: Text(translate('app_bar.title')),
