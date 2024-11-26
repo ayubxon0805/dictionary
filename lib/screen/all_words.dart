@@ -7,7 +7,6 @@ import '../../bloc/get_word/get_word_bloc.dart';
 
 class AllWordsScreen extends StatefulWidget {
   const AllWordsScreen({super.key});
-
   @override
   State<AllWordsScreen> createState() => _AllWordsScreenState();
 }
