@@ -1,9 +1,9 @@
-import 'package:dictionary/dialogs.dart';
-import 'package:dictionary/edit_word.dart';
+import 'package:dictionary/widgets/dialogs_screen.dart';
+import 'package:dictionary/screen/edit_word_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'bloc/get_word/get_word_bloc.dart';
+import '../../bloc/get_word/get_word_bloc.dart';
 
 class AllWordsScreen extends StatefulWidget {
   const AllWordsScreen({super.key});

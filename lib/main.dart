@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'add_words.dart';
-import 'all_words.dart';
+import 'screen/add_words_screen.dart';
+import 'screen/all_words.dart';
 import 'bloc/get_word/get_word_bloc.dart';
 import 'bloc/vocabluary/getvocabluary_bloc.dart';
-import 'essetianal.dart';
-import 'radn_words.dart';
-import 'package:dictionary/hive_words.dart';
+import 'screen/essetianal_book_screen.dart';
+import 'screen/radn_words.dart';
+import 'package:dictionary/screen/daily_words_screen.dart';
 import 'services/isar_service.dart';
 
 void main() async {

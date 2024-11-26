@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart'; // DateFormat uchun import
 
-import 'models/words_model/word.dart';
-import 'services/isar_service.dart';
+import '../models/words_model/word.dart';
+import '../services/isar_service.dart';
 
 class EssetianalPage extends StatefulWidget {
   const EssetianalPage({super.key});

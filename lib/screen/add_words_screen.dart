@@ -2,7 +2,7 @@
 import 'package:dictionary/models/words_model/word.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'services/isar_service.dart';
+import '../services/isar_service.dart';
 
 class AddWordsScreen extends StatefulWidget {
   const AddWordsScreen({super.key});

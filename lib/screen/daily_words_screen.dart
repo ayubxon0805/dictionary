@@ -44,9 +44,11 @@ class _HiveWordsPageState extends State<HiveWordsPage> {
             ),
             child: ExpansionTile(
               title: Text(
-                unit.name ?? 'Unit ${unit.unitIndex}',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                'Unit ${unitIndex + 1}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               children: [
                 ..._buildWordList(unit),
@@ -69,8 +71,8 @@ class _HiveWordsPageState extends State<HiveWordsPage> {
 
   // Build word items in a unit
   List<Widget> _buildWordList(HiveVocabluaryModel unit) {
-    final engWords = unit.eng?.split(', ') ?? [];
-    final uzWords = unit.uz?.split(', ') ?? [];
+    final engWords = unit.eng.split(', ') ?? [];
+    final uzWords = unit.uz.split(', ') ?? [];
 
     return List.generate(engWords.length, (index) {
       return Card(
@@ -122,7 +124,9 @@ class _HiveWordsPageState extends State<HiveWordsPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {},
+                        onPressed: () {
+                          _deleteWord(unit, index);
+                        },
                         iconSize: 20,
                       ),
                     ],
@@ -409,6 +413,31 @@ class _HiveWordsPageState extends State<HiveWordsPage> {
         ],
       ),
     );
+  }
+
+  void _deleteWord(HiveVocabluaryModel unit, int index) {
+    // So'zlarni vergul bilan ajratib olish
+    final engWords = unit.eng.split(', ') ?? [];
+    final uzWords = unit.uz.split(', ') ?? [];
+
+    // So'zni o'chirish
+    engWords.removeAt(index);
+    uzWords.removeAt(index);
+
+    if (engWords.isEmpty) {
+      // Agar so'z qolmagan bo'lsa butun unitni o'chirish
+      final unitIndex = HiveBoxes.allvocabluary.values.toList().indexOf(unit);
+      HiveBoxes.allvocabluary.deleteAt(unitIndex);
+    } else {
+      // Yangi listni saqlash
+      unit.eng = engWords.join(', ');
+      unit.uz = uzWords.join(', ');
+      unit.save();
+    }
+
+    setState(() {
+      allwords = HiveBoxes.allvocabluary.values.toList();
+    });
   }
 
   // Clear all words
