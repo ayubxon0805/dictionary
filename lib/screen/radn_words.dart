@@ -23,6 +23,7 @@ class _RandomWordsScreenState extends State<RandomWordsScreen> {
   bool isShow = false;
   bool isShow2 = false;
   FlutterTts flutterTts = FlutterTts();
+  List<HiveVocabluaryModel> selectedWords = [];
 
   void _getRandomWordFromUnit(HiveVocabluaryModel unit) {
     if (unit.eng == null || unit.uz == null) return;
@@ -37,8 +38,8 @@ class _RandomWordsScreenState extends State<RandomWordsScreen> {
     setState(() {
       en = engWords[randomIndex];
       uz = randomIndex < uzWords.length ? uzWords[randomIndex] : '';
-      isShow = false;
-      isShow2 = true;
+      isShow = true; // Uz tilidagi matnni avtomatik ko'rinishga chiqarish
+      isShow2 = true; // En tilidagi matnni avtomatik ko'rinishga chiqarish
     });
   }
 
@@ -69,60 +70,64 @@ class _RandomWordsScreenState extends State<RandomWordsScreen> {
               children: [
                 HiveBoxes.allvocabluary.values.isNotEmpty
                     ? Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
+                        height: MediaQuery.of(context).size.height * 0.1,
                         child: ListView.builder(
+                          scrollDirection:
+                              Axis.horizontal, // Gorizontal scroll qilish
                           padding: const EdgeInsets.all(8),
                           itemCount: HiveBoxes.allvocabluary.values.length,
                           itemBuilder: (context, index) {
                             final unit =
                                 HiveBoxes.allvocabluary.values.toList()[index];
-                            return Card(
-                              elevation: 0,
-                              margin: const EdgeInsets.symmetric(vertical: 4),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: Colors.blue.withOpacity(0.2),
-                                ),
-                              ),
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 8.0), // Kartalar oralig'i
                               child: InkWell(
                                 onTap: () => _getRandomWordFromUnit(unit),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Unit ${index + 1}',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color:
-                                              Color.fromARGB(255, 7, 67, 116),
-                                        ),
-                                      ),
-                                      const Icon(
-                                        Icons.play_circle_outline,
-                                        color: Color.fromARGB(255, 7, 67, 116),
+                                child: Container(
+                                  width: 80, // Kenglik 70 piksel
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
                                       ),
                                     ],
+                                    border: Border.all(
+                                      color:
+                                          const Color.fromARGB(255, 87, 95, 101)
+                                              .withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Unit ${index + 1}',
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color.fromARGB(
+                                                  255, 7, 67, 116),
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const Icon(
+                                            color: Colors.grey,
+                                            Icons.play_circle_fill_outlined,
+                                            size: 20,
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -134,30 +139,46 @@ class _RandomWordsScreenState extends State<RandomWordsScreen> {
                 Column(
                   children: [
                     isShow2 == true
-                        ? Center(
-                            child: Text(
-                              en,
-                              style: GoogleFonts.comfortaa(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 30),
+                        ? Container(
+                            height: 60,
+                            child: Center(
+                              child: FittedBox(
+                                fit: BoxFit
+                                    .scaleDown, // Matnni o‘lchovga moslashtirish
+                                child: Text(
+                                  en,
+                                  style: GoogleFonts.comfortaa(
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 25, // Maksimal font o‘lchami
+                                  ),
+                                ),
+                              ),
                             ),
                           )
                         : const Text(""),
                     isShow == true
-                        ? Center(
-                            child: Text(
-                              uz,
-                              style: GoogleFonts.comfortaa(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.light
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 30),
+                        ? Container(
+                            margin: const EdgeInsets.symmetric(vertical: 5),
+                            height: 60,
+                            child: Center(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  uz,
+                                  style: GoogleFonts.comfortaa(
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                              ),
                             ),
                           )
                         : const Text(""),
